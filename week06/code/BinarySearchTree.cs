@@ -9,14 +9,11 @@ public class BinarySearchTree : IEnumerable<int>
     /// </summary>
     public void Insert(int value)
     {
-        // Create new node
-        Node newNode = new(value);
-        // If the list is empty, then point both head and tail to the new node.
+        // If the tree is empty, the new node becomes the root.
         if (_root is null)
         {
-            _root = newNode;
+            _root = new Node(value);
         }
-        // If the list is not empty, then only head will be affected.
         else
         {
             _root.Insert(value);
@@ -34,11 +31,10 @@ public class BinarySearchTree : IEnumerable<int>
     }
 
     /// <summary>
-    /// Yields all values in the tree
+    /// Yields all values in the tree in ascending order (in-order).
     /// </summary>
     IEnumerator IEnumerable.GetEnumerator()
     {
-        // call the generic version of the method
         return GetEnumerator();
     }
 
@@ -66,7 +62,7 @@ public class BinarySearchTree : IEnumerable<int>
     }
 
     /// <summary>
-    /// Iterate backward through the BST.
+    /// Iterate backward through the BST (largest to smallest).
     /// </summary>
     public IEnumerable Reverse()
     {
@@ -81,6 +77,17 @@ public class BinarySearchTree : IEnumerable<int>
     private void TraverseBackward(Node? node, List<int> values)
     {
         // TODO Problem 3
+        if (node is null) return;
+
+        // Reverse in-order:
+        // 1) Traverse right
+        TraverseBackward(node.Right, values);
+
+        // 2) Visit current
+        values.Add(node.Data);
+
+        // 3) Traverse left
+        TraverseBackward(node.Left, values);
     }
 
     /// <summary>
@@ -99,8 +106,10 @@ public class BinarySearchTree : IEnumerable<int>
     }
 }
 
-public static class IntArrayExtensionMethods {
-    public static string AsString(this IEnumerable array) {
+public static class IntArrayExtensionMethods
+{
+    public static string AsString(this IEnumerable array)
+    {
         return "<IEnumerable>{" + string.Join(", ", array.Cast<int>()) + "}";
     }
 }
